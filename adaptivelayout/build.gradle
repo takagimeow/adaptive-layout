@@ -1,22 +1,10 @@
-buildscript {
-    ext {
-        compose_version = '1.3.1'
-        hilt_version = '2.44.2'
-    }
-
-    dependencies {
-        // Hilt
-        classpath("com.google.dagger:hilt-android-gradle-plugin:$hilt_version")
-    }
-}
-
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     // Kapt
     id 'kotlin-kapt'
     // Hilt
-    // id 'dagger.hilt.android.plugin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -48,6 +36,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs = ["-Xcontext-receivers"]
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
     }
 }
 
@@ -82,4 +75,25 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+
+    // Test
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation "io.mockk:mockk:1.12.4"
+    testImplementation "org.robolectric:robolectric:4.9"
+
+    // Hilt for Test
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    testImplementation 'androidx.compose.ui:ui-test-junit4'
+    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // AndroidTest
+    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    androidTestImplementation "com.google.dagger:dagger:$hilt_version"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$hilt_version"
 }
