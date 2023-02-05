@@ -10,6 +10,14 @@ But with this composable, all you have to prepare is the content you want to sho
 
 The composables take care of the complicated work required to implement adaptive layouts.
 
+## Samples
+
+| Device | |
+| --- | --- |
+| Smartphone |![](https://user-images.githubusercontent.com/66447334/216823094-4e4c7b05-7ece-428f-9383-4dd28447bb96.png)|
+| Foldable|![](https://user-images.githubusercontent.com/66447334/216823109-5a0bd223-d453-47fd-8637-d9ec721b697f.png)|
+| Tablet |![](https://user-images.githubusercontent.com/66447334/216823121-f5b41ad2-2765-45e1-a6bc-d5f0d9d10c2c.png)|
+
 ## Setup
 
 This chapter will show you how to add libraries to your project.
