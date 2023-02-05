@@ -27,4 +27,11 @@ class AdaptiveLayoutAppBookPostureTest {
             ensureIconBecomesSelectedWhenClicked()
         }
     }
+
+    @Test
+    fun test_drawer_displayed() {
+        adaptiveLayoutAppBookPostureRobot(robotTestRule) {
+            ensureDrawerDisplayed()
+        }
+    }
 }
