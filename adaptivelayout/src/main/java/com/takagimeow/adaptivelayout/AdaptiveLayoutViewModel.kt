@@ -13,21 +13,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-data class AdaptiveLayoutUiState(
-    val isAuthenticated: Boolean = false,
-)
-
 class AdaptiveLayoutViewModel (
     val activity: ComponentActivity
 ): ViewModel() {
-    private val _uiState =
-        MutableStateFlow(
-            AdaptiveLayoutUiState(
-                isAuthenticated = true
-            )
-        )
-    val uiState: StateFlow<AdaptiveLayoutUiState> = _uiState.asStateFlow()
-
     // Check and monitor folding state.
     val devicePostureFlow = WindowInfoTracker.getOrCreate(activity)
         .windowLayoutInfo(activity)
