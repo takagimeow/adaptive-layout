@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_rail">Navigation Rail</string>
+    <string name="navigation_rail_drawer_icon">Drawer Icon on Navigation Rail</string>
+    <string name="navigation_rail_selected_icon">Selected %1$s Icon on Navigation Rail</string>
+    <string name="navigation_rail_unselected_icon">Unselected %1$s Icon on Navigation Rail</string>
+</resources>
