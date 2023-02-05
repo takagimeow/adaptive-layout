@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.github.jitpack'
-version = '0.1'
+version = '0.1.1'
 
 android {
     namespace 'com.takagimeow.adaptivelayout'
@@ -111,7 +111,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.takagimeow'
                 artifactId = 'adaptive-layout'
-                version = '0.1'
+                version = '0.1.1'
             }
         }
     }
