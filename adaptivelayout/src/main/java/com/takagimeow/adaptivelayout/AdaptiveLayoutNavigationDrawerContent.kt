@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,11 +30,15 @@ fun AdaptiveLayoutNavigationDrawerContent(
     onDrawerClicked: () -> Unit = {},
     onNavigate: (AdaptiveLayoutNavigationDestination) -> Unit,
 ) {
+    val navigationDrawerContentDescription = stringResource(id = R.string.navigation_drawer)
     Column(
         modifier
             .wrapContentWidth()
             .fillMaxHeight()
             .padding(24.dp)
+            .semantics {
+                contentDescription = navigationDrawerContentDescription
+            }
     ) {
         Row(
             modifier = modifier
@@ -54,14 +60,19 @@ fun AdaptiveLayoutNavigationDrawerContent(
                     } else {
                         destination.unselectedAdaptiveLayoutIcon
                     }
+                    val contentDescription = if (selected) {
+                        stringResource(id = R.string.navigation_drawer_selected_icon, destination.route)
+                    } else {
+                        stringResource(id = R.string.navigation_drawer_unselected_icon, destination.route)
+                    }
                     when (icon) {
                         is AdaptiveLayoutIcon.ImageVectorAdaptiveLayoutIcon -> Icon(
                             imageVector = icon.imageVector,
-                            contentDescription = destination.route
+                            contentDescription = contentDescription
                         )
                         is AdaptiveLayoutIcon.DrawableResourceAdaptiveLayoutIcon -> Icon(
                             painter = painterResource(id = icon.id),
-                            contentDescription = destination.route
+                            contentDescription = contentDescription
                         )
                     }
                 },
