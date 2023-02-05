@@ -3,6 +3,7 @@ package com.takagimeow.adaptivelayout
 import android.graphics.Rect
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -29,6 +30,17 @@ class AdaptiveLayoutAppBookPostureRobot @Inject constructor() {
 
         composeTestRule.onNodeWithContentDescription("Unselected home_route Icon on Navigation Rail").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Selected settings_route Icon on Navigation Rail").assertIsDisplayed()
+    }
+
+    context(RobotTestRule)
+    fun ensureDrawerDisplayed() {
+        composeTestRule.onNodeWithContentDescription("Drawer Icon on Navigation Rail").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Navigation Drawer").assertIsDisplayed()
+
+        composeTestRule.onNodeWithContentDescription("Unselected settings_route Icon on Navigation Drawer").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Navigation Drawer").assertIsNotDisplayed()
     }
 
     operator fun invoke(
