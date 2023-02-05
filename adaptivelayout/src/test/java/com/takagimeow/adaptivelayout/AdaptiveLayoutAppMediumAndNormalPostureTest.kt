@@ -10,27 +10,27 @@ import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class AdaptiveLayoutAppBookPostureTest {
+class AdaptiveLayoutAppMediumAndNormalPostureTest {
     @get:Rule val robotTestRule = RobotTestRule(this)
-    @Inject lateinit var adaptiveLayoutAppBookPostureRobot: AdaptiveLayoutAppBookPostureRobot
+    @Inject lateinit var adaptiveLayoutAppMediumAndNormalPostureRobot: AdaptiveLayoutAppMediumAndNormalPostureRobot
 
     @Test
     fun test_rail_displayed() {
-        adaptiveLayoutAppBookPostureRobot(robotTestRule) {
+        adaptiveLayoutAppMediumAndNormalPostureRobot(robotTestRule) {
             checkNavigationRailDisplayed()
         }
     }
 
     @Test
     fun test_icon_becomes_selected_when_clicked() {
-        adaptiveLayoutAppBookPostureRobot(robotTestRule) {
+        adaptiveLayoutAppMediumAndNormalPostureRobot(robotTestRule) {
             ensureIconBecomesSelectedWhenClicked()
         }
     }
 
     @Test
     fun test_drawer_displayed() {
-        adaptiveLayoutAppBookPostureRobot(robotTestRule) {
+        adaptiveLayoutAppMediumAndNormalPostureRobot(robotTestRule) {
             ensureDrawerDisplayed()
         }
     }
