@@ -48,6 +48,6 @@ dependencyResolutionManagement {
 
 ```groovy
 dependencies {
-    implementation 'com.github.takagimeow:adaptive-layout:0.1.2'
+    implementation 'com.github.takagimeow:adaptive-layout:0.1.3'
 }
 ```
