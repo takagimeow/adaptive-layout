@@ -5,7 +5,12 @@ plugins {
     id 'kotlin-kapt'
     // Hilt
     id 'dagger.hilt.android.plugin'
+    // Jitpack.IO
+    id 'maven-publish'
 }
+
+group = 'com.github.jitpack'
+version = '0.1.0'
 
 android {
     namespace 'com.takagimeow.adaptivelayout'
@@ -96,4 +101,18 @@ dependencies {
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$hilt_version"
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.takagimeow'
+                artifactId = 'adaptive-layout'
+                version = '0.1.0'
+            }
+        }
+    }
 }
