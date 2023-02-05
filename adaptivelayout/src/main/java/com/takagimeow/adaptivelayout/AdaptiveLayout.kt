@@ -14,13 +14,13 @@ import androidx.compose.runtime.getValue
 @Composable
 fun AdaptiveLayout(
     appState: AdaptiveLayoutAppState,
+    optionalNavigationDisplayConditions: Boolean = true,
     viewModel: AdaptiveLayoutViewModel,
     activity: ComponentActivity,
     background: @Composable (route: String?, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
     content: @Composable (isListAndDetail: Boolean) -> Unit,
 ) {
 
-    val uiState by viewModel.uiState.collectAsState()
     val devicePostureFlow = viewModel.devicePostureFlow
     val devicePosture = devicePostureFlow.collectAsState().value
 
@@ -30,7 +30,7 @@ fun AdaptiveLayout(
         appState = appState,
         windowSize = windowSize.widthSizeClass,
         foldingDevicePosture = devicePosture,
-        optionalNavigationDisplayConditions = uiState.isAuthenticated,
+        optionalNavigationDisplayConditions = optionalNavigationDisplayConditions,
         background = background,
         content = content,
     )
