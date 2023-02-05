@@ -23,7 +23,7 @@ class AdaptiveLayoutViewModel (
     private val _uiState =
         MutableStateFlow(
             AdaptiveLayoutUiState(
-                isAuthenticated = false
+                isAuthenticated = true
             )
         )
     val uiState: StateFlow<AdaptiveLayoutUiState> = _uiState.asStateFlow()
