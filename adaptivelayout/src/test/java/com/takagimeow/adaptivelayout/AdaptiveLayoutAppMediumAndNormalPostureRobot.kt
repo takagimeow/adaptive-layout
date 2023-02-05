@@ -1,6 +1,5 @@
 package com.takagimeow.adaptivelayout
 
-import android.graphics.Rect
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -12,7 +11,7 @@ import com.takagimeow.adaptivelayout.core.testing.RobotTestRule
 import com.takagimeow.adaptivelayout.ui.AdaptiveLayoutNavGraph
 import javax.inject.Inject
 
-class AdaptiveLayoutAppBookPostureRobot @Inject constructor() {
+class AdaptiveLayoutAppMediumAndNormalPostureRobot @Inject constructor() {
 
     context(RobotTestRule)
     fun checkNavigationRailDisplayed() {
@@ -45,7 +44,7 @@ class AdaptiveLayoutAppBookPostureRobot @Inject constructor() {
 
     operator fun invoke(
         robotTestRule: RobotTestRule,
-        function: context(RobotTestRule) AdaptiveLayoutAppBookPostureRobot.() -> Unit
+        function: context(RobotTestRule) AdaptiveLayoutAppMediumAndNormalPostureRobot.() -> Unit
     ) {
         robotTestRule.composeTestRule.setContent {
             val topLevelDestinations: List<AdaptiveLayoutTopLevelDestination> = listOf(
@@ -58,8 +57,8 @@ class AdaptiveLayoutAppBookPostureRobot @Inject constructor() {
 
             AdaptiveLayoutApp(
                 appState = appState,
-                windowSize = WindowWidthSizeClass.Expanded,
-                foldingDevicePosture = DevicePosture.BookPosture(Rect()),
+                windowSize = WindowWidthSizeClass.Medium,
+                foldingDevicePosture = DevicePosture.NormalPosture,
                 optionalNavigationDisplayConditions = true,
                 background = { _, content -> content() }
             ) {isListAndDetail ->
@@ -72,6 +71,6 @@ class AdaptiveLayoutAppBookPostureRobot @Inject constructor() {
                 )
             }
         }
-        function(robotTestRule, this@AdaptiveLayoutAppBookPostureRobot)
+        function(robotTestRule, this@AdaptiveLayoutAppMediumAndNormalPostureRobot)
     }
 }
