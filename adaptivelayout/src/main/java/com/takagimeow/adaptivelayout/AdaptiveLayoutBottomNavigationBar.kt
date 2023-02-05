@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 
 @Composable
 fun AdaptiveLayoutBottomNavigationBar(
@@ -17,8 +19,13 @@ fun AdaptiveLayoutBottomNavigationBar(
     currentRoute: String?,
     onNavigate: (AdaptiveLayoutNavigationDestination) -> Unit,
 ) {
+    val bottomNavigationBarContentDescription = stringResource(id = R.string.bottom_navigation_bar)
     NavigationBar(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics {
+                contentDescription = bottomNavigationBarContentDescription
+            }
     ) {
         destinations.forEachIndexed { _, destination ->
             val selected = currentRoute == destination.destination
@@ -32,15 +39,20 @@ fun AdaptiveLayoutBottomNavigationBar(
                     } else {
                         destination.unselectedAdaptiveLayoutIcon
                     }
+                    val contentDescription = if (selected) {
+                        stringResource(id = R.string.bottom_navigation_bar_selected_icon, destination.route)
+                    } else {
+                        stringResource(id = R.string.bottom_navigation_bar_unselected_icon, destination.route)
+                    }
                     when (icon) {
                         is AdaptiveLayoutIcon.ImageVectorAdaptiveLayoutIcon -> Icon(
                             imageVector = icon.imageVector,
-                            contentDescription = destination.route
+                            contentDescription = contentDescription
                         )
 
                         is AdaptiveLayoutIcon.DrawableResourceAdaptiveLayoutIcon -> Icon(
                             painter = painterResource(id = icon.id),
-                            contentDescription = destination.route
+                            contentDescription = contentDescription
                         )
                     }
                 },
