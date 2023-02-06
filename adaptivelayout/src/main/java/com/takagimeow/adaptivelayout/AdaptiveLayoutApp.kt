@@ -17,6 +17,8 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 
 // private const val TAG = "AdaptiveLayoutApp"
@@ -24,12 +26,25 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun AdaptiveLayoutApp(
-    appState: AdaptiveLayoutAppState,
+    // Property
+    navController: NavHostController,
+    topLevelDestinations: List<AdaptiveLayoutTopLevelDestination>,
+    currentRoute: String?,
     windowSize: WindowWidthSizeClass,
     foldingDevicePosture: DevicePosture, // State indicating whether folded or not.
     optionalNavigationDisplayConditions: Boolean,
+    shouldShowBottomBar: Boolean,
+    // Handler
+    onNavigateToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    onNavigateAndPopUpToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    // Composable
     background: @Composable (route: String?, @Composable () -> Unit) -> Unit,
-    content: @Composable (isListAndDetail: Boolean) -> Unit,
+    content: @Composable (
+        isListAndDetail: Boolean,
+        navController: NavHostController,
+        onNavigateToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
+        onNavigateAndPopUpToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
+    ) -> Unit,
 ) {
     val navigationType: AdaptiveLayoutNavigationType
     val contentType: AdaptiveLayoutContentType
@@ -69,10 +84,15 @@ fun AdaptiveLayoutApp(
     }
 
     AdaptiveLayoutNavigationWrapperUI(
-        appState,
+        navController,
+        topLevelDestinations,
+        currentRoute,
         navigationType,
         contentType,
         optionalNavigationDisplayConditions = optionalNavigationDisplayConditions,
+        shouldShowBottomBar = shouldShowBottomBar,
+        onNavigateToDestination = onNavigateToDestination,
+        onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
         background = background,
         content = content,
     )
@@ -82,12 +102,25 @@ fun AdaptiveLayoutApp(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AdaptiveLayoutNavigationWrapperUI(
-    appState: AdaptiveLayoutAppState,
+    // Property
+    navController: NavHostController,
+    topLevelDestinations: List<AdaptiveLayoutTopLevelDestination>,
+    currentRoute: String?,
     navigationType: AdaptiveLayoutNavigationType,
     contentType: AdaptiveLayoutContentType,
     optionalNavigationDisplayConditions: Boolean,
+    shouldShowBottomBar: Boolean,
+    // Handler
+    onNavigateToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    onNavigateAndPopUpToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    // Composable
     background: @Composable (route: String?, @Composable () -> Unit) -> Unit,
-    content: @Composable (isListAndDetail: Boolean) -> Unit,
+    content: @Composable (
+        isListAndDetail: Boolean,
+        navController: NavHostController,
+        onNavigateToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
+        onNavigateAndPopUpToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
+    ) -> Unit,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -97,23 +130,30 @@ private fun AdaptiveLayoutNavigationWrapperUI(
             drawerContent = {
                 PermanentDrawerSheet {
                     AdaptiveLayoutNavigationDrawerContent(
-                        destinations = appState.topLevelDestinations,
-                        selectedDestination = appState.currentDestination?.route,
+                        destinations = topLevelDestinations,
+                        selectedDestination = currentRoute,
                         onDrawerClicked = {
                             scope.launch {
                                 drawerState.close()
                             }
                         },
-                        onNavigate = appState::navigateAndPopUp
+                        onNavigate = {
+                            onNavigateAndPopUpToDestination(it, null, null)
+                        }
                     )
                 }
             }
         ) {
             AdaptiveLayoutAppContent(
-                appState,
+                navController,
+                topLevelDestinations,
+                currentRoute,
                 navigationType,
                 contentType,
                 optionalNavigationDisplayConditions = true,
+                shouldShowBottomBar = shouldShowBottomBar,
+                onNavigateToDestination = onNavigateToDestination,
+                onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
                 background = background,
                 content = content,
             )
@@ -123,44 +163,56 @@ private fun AdaptiveLayoutNavigationWrapperUI(
             drawerContent = {
                 ModalDrawerSheet {
                     AdaptiveLayoutNavigationDrawerContent(
-                        destinations = appState.topLevelDestinations,
-                        selectedDestination = appState.currentDestination?.route,
+                        destinations = topLevelDestinations,
+                        selectedDestination = currentRoute,
                         onDrawerClicked = {
                             scope.launch {
                                 drawerState.close()
                             }
                         },
-                        onNavigate = appState::navigateAndPopUp
+                        onNavigate = {
+                            onNavigateAndPopUpToDestination(it, null, null)
+                        }
                     )
                 }
             },
             drawerState = drawerState
         ) {
             AdaptiveLayoutAppContent(
-                appState,
+                navController,
+                topLevelDestinations,
+                currentRoute,
                 navigationType,
                 contentType,
                 optionalNavigationDisplayConditions = true,
+                shouldShowBottomBar = shouldShowBottomBar,
                 onDrawerClicked = {
                     scope.launch {
                         drawerState.open()
                     }
                 },
+                onNavigateToDestination = onNavigateToDestination,
+                onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
                 background = background,
                 content = content,
             )
         }
     } else {
         AdaptiveLayoutAppContent(
-            appState,
+            navController,
+            topLevelDestinations,
+            currentRoute,
             navigationType,
             contentType,
             optionalNavigationDisplayConditions = false,
+            shouldShowBottomBar = shouldShowBottomBar,
             onDrawerClicked = {
                 scope.launch {
                     drawerState.open()
                 }
             },
+            onNavigateToDestination = onNavigateToDestination,
+            onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
             background = background,
             content = content,
         )
@@ -170,22 +222,37 @@ private fun AdaptiveLayoutNavigationWrapperUI(
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun AdaptiveLayoutAppContent(
-    appState: AdaptiveLayoutAppState,
+    // Property
+    navController: NavHostController,
+    topLevelDestinations: List<AdaptiveLayoutTopLevelDestination>,
+    currentRoute: String?,
     navigationType: AdaptiveLayoutNavigationType,
     contentType: AdaptiveLayoutContentType,
     optionalNavigationDisplayConditions: Boolean,
+    shouldShowBottomBar: Boolean,
+    // Handler
     onDrawerClicked: () -> Unit = {},
+    onNavigateToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    onNavigateAndPopUpToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    // Composable
     background: @Composable (route: String?, @Composable () -> Unit) -> Unit,
-    content: @Composable (isListAndDetail: Boolean) -> Unit,
+    content: @Composable (
+        isListAndDetail: Boolean,
+        navController: NavHostController,
+        onNavigateToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+        onNavigateAndPopUpToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
+    ) -> Unit,
 ) {
 
     Row(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == AdaptiveLayoutNavigationType.NAVIGATION_RAIL && optionalNavigationDisplayConditions) {
             AdaptiveLayoutNavigationRail(
-                destinations = appState.topLevelDestinations,
-                selectedDestination = appState.currentDestination?.route,
+                destinations = topLevelDestinations,
+                selectedDestination = currentRoute,
                 onDrawerClicked = onDrawerClicked,
-                onNavigate = appState::navigateAndPopUp
+                onNavigate = {
+                    onNavigateAndPopUpToDestination(it, null, null)
+                }
             )
         }
         Column(
@@ -195,20 +262,25 @@ fun AdaptiveLayoutAppContent(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                background(appState.currentDestination?.route) {
+                background(currentRoute) {
                     content(
-                        isListAndDetail = contentType == AdaptiveLayoutContentType.LIST_AND_DETAIL
+                        isListAndDetail = contentType == AdaptiveLayoutContentType.LIST_AND_DETAIL,
+                        navController = navController,
+                        onNavigateToDestination = onNavigateToDestination,
+                        onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
                     )
                 }
             }
 
             AnimatedVisibility(
-                visible = navigationType == AdaptiveLayoutNavigationType.BOTTOM_NAVIGATION && appState.shouldShowBottomBar
+                visible = navigationType == AdaptiveLayoutNavigationType.BOTTOM_NAVIGATION && shouldShowBottomBar
             ) {
                 AdaptiveLayoutBottomNavigationBar(
-                    destinations = appState.topLevelDestinations,
-                    currentRoute = appState.currentDestination?.route,
-                    onNavigate = appState::navigateAndPopUp
+                    destinations = topLevelDestinations,
+                    currentRoute = currentRoute,
+                    onNavigate = {
+                        onNavigateAndPopUpToDestination(it, null, null)
+                    }
                 )
             }
         }

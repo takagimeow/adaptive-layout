@@ -68,25 +68,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val appState = rememberAdaptiveLayoutAppState(
-                topLevelDestinations = listOf(
-                    HomeTopLevelDestination,
-                    SettingsTopLevelDestination,
-                ),
-            )
-            val viewModel = AdaptiveLayoutViewModel(activity = this)
-
             MyApplicationTheme {
                 AdaptiveLayout(
-                    appState = appState,
-                    viewModel = viewModel,
-                    activity = this,
+                    topLevelDestinations = listOf(
+                        HomeTopLevelDestination,
+                        SettingsTopLevelDestination,
+                    ),
                     background = { _, content ->
                         content()
                     },
-                ) { isListAndDetail ->
+                ) { isListAndDetail, navController, navigate, navigateAndPopUp ->
                     MyApplicationNavGraph(
-                        isListAndDetail,
+                        navController = navController,
+                        isListAndDetail = isListAndDetail,
+                        startDestination = HomeDestination.route,
+                        onNavigateAndPopUpToDestination = navigateAndPopUp,
+                        onNavigateToDestination = navigate,
                     )
                 }
             }
@@ -127,6 +124,6 @@ dependencyResolutionManagement {
 
 ```groovy
 dependencies {
-    implementation 'com.github.takagimeow:adaptive-layout:0.2'
+    implementation 'com.github.takagimeow:adaptive-layout:0.3'
 }
 ```

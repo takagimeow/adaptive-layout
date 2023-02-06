@@ -1,12 +1,15 @@
 package com.takagimeow.adaptivelayout
 
+import androidx.activity.ComponentActivity
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToString
+import androidx.navigation.compose.rememberNavController
 import com.takagimeow.adaptivelayout.core.testing.RobotTestRule
 import com.takagimeow.adaptivelayout.ui.AdaptiveLayoutNavGraph
 import javax.inject.Inject
@@ -51,23 +54,36 @@ class AdaptiveLayoutAppMediumAndNormalPostureRobot @Inject constructor() {
                 HomeTopLevelDestination,
                 SettingsTopLevelDestination
             )
-            val appState = rememberAdaptiveLayoutAppState(
+
+            val navController = rememberNavController()
+            val context = LocalContext.current
+            val viewModel = AdaptiveLayoutViewModel(
+                contextProvider = object : ContextProvider {
+                    override val activity: ComponentActivity
+                        get() = context as ComponentActivity
+                },
+                navController = navController,
                 topLevelDestinations = topLevelDestinations,
             )
 
             AdaptiveLayoutApp(
-                appState = appState,
+                navController = navController,
+                topLevelDestinations = topLevelDestinations,
+                currentRoute = viewModel.currentDestination?.route,
                 windowSize = WindowWidthSizeClass.Medium,
                 foldingDevicePosture = DevicePosture.NormalPosture,
                 optionalNavigationDisplayConditions = true,
+                shouldShowBottomBar = viewModel.shouldShowBottomBar,
+                onNavigateToDestination = viewModel::navigate,
+                onNavigateAndPopUpToDestination = viewModel::navigateAndPopUp,
                 background = { _, content -> content() }
-            ) {isListAndDetail ->
+            ) {isListAndDetail, navController, navigate, navigateAndPopUp ->
                 AdaptiveLayoutNavGraph(
-                    navController = appState.navController,
+                    navController = navController,
                     isListAndDetail = isListAndDetail,
                     startDestination = HomeDestination.route,
-                    onNavigateAndPopUpToDestination = appState::navigateAndPopUp,
-                    onNavigateToDestination = appState::navigate,
+                    onNavigateAndPopUpToDestination = navigateAndPopUp,
+                    onNavigateToDestination = navigate,
                 )
             }
         }
