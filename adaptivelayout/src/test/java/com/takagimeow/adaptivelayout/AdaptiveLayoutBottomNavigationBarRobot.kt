@@ -7,6 +7,9 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToLog
+import androidx.compose.ui.test.printToString
 import com.takagimeow.adaptivelayout.core.testing.RobotTestRule
 import javax.inject.Inject
 
@@ -50,12 +53,15 @@ class AdaptiveLayoutBottomNavigationBarRobot @Inject constructor() {
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.home)).assertExists()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.settings)).assertExists()
 
+        val semanticsTree = composeTestRule.onRoot().printToString()
+        println(semanticsTree)
+
         composeTestRule.onNode(
-            hasContentDescription("home_route"),
+            hasContentDescription("Selected home_route Icon on Bottom Navigation Bar"),
             useUnmergedTree = true,
         ).assertExists()
         composeTestRule.onNode(
-            hasContentDescription("settings_route"),
+            hasContentDescription("Unselected settings_route Icon on Bottom Navigation Bar"),
             useUnmergedTree = true
         ).assertExists()
     }
