@@ -18,6 +18,10 @@ import androidx.navigation.compose.rememberNavController
 fun AdaptiveLayout(
     navController: NavHostController = rememberNavController(),
     topLevelDestinations: List<AdaptiveLayoutTopLevelDestination>,
+    appState: AdaptiveLayoutAppState = rememberAdaptiveLayoutAppState(
+        navController = navController,
+        topLevelDestinations = topLevelDestinations
+    ),
     optionalNavigationDisplayConditions: Boolean = true,
     background: @Composable (route: String?, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
     content: @Composable (
@@ -32,9 +36,7 @@ fun AdaptiveLayout(
         contextProvider = object : ContextProvider {
             override val activity: ComponentActivity
                 get() = context as ComponentActivity
-        },
-        navController = navController,
-        topLevelDestinations = topLevelDestinations,
+        }
     )
 
     val devicePostureFlow = viewModel.devicePostureFlow
@@ -43,15 +45,15 @@ fun AdaptiveLayout(
     val windowSize = calculateWindowSizeClass(context as ComponentActivity)
 
     AdaptiveLayoutApp(
-        navController = viewModel.navController,
-        topLevelDestinations = viewModel.topLevelDestinations,
-        currentRoute = viewModel.currentDestination?.route,
+        navController = appState.navController,
+        topLevelDestinations = appState.topLevelDestinations,
+        currentRoute = appState.currentDestination?.route,
         windowSize = windowSize.widthSizeClass,
         foldingDevicePosture = devicePosture,
         optionalNavigationDisplayConditions = optionalNavigationDisplayConditions,
-        shouldShowBottomBar = viewModel.shouldShowBottomBar,
-        onNavigateToDestination = viewModel::navigate,
-        onNavigateAndPopUpToDestination = viewModel::navigateAndPopUp,
+        shouldShowBottomBar = appState.shouldShowBottomBar,
+        onNavigateToDestination = appState::navigate,
+        onNavigateAndPopUpToDestination = appState::navigateAndPopUp,
         background = background,
         content = content,
     )

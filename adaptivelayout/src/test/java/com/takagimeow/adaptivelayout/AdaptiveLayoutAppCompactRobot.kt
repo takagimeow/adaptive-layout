@@ -28,11 +28,23 @@ class AdaptiveLayoutAppCompactRobot @Inject constructor() {
         val semanticsTree = composeTestRule.onRoot().printToString()
         println(semanticsTree)
 
-        composeTestRule.onNodeWithContentDescription("Selected home_route Icon on Bottom Navigation Bar", useUnmergedTree = true).assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription("Unselected settings_route Icon on Bottom Navigation Bar", useUnmergedTree = true).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithContentDescription(
+            "Selected home_route Icon on Bottom Navigation Bar",
+            useUnmergedTree = true
+        ).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(
+            "Unselected settings_route Icon on Bottom Navigation Bar",
+            useUnmergedTree = true
+        ).assertIsDisplayed().performClick()
 
-        composeTestRule.onNodeWithContentDescription("Unselected home_route Icon on Bottom Navigation Bar", useUnmergedTree = true).assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription("Selected settings_route Icon on Bottom Navigation Bar", useUnmergedTree = true).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(
+            "Unselected home_route Icon on Bottom Navigation Bar",
+            useUnmergedTree = true
+        ).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(
+            "Selected settings_route Icon on Bottom Navigation Bar",
+            useUnmergedTree = true
+        ).assertIsDisplayed()
     }
 
     operator fun invoke(
@@ -45,27 +57,22 @@ class AdaptiveLayoutAppCompactRobot @Inject constructor() {
                 SettingsTopLevelDestination
             )
             val navController = rememberNavController()
-            val context = LocalContext.current
-            val viewModel = AdaptiveLayoutViewModel(
-                contextProvider = object : ContextProvider {
-                    override val activity: ComponentActivity
-                        get() = context as ComponentActivity
-                },
+            val appState: AdaptiveLayoutAppState = rememberAdaptiveLayoutAppState(
                 navController = navController,
-                topLevelDestinations = topLevelDestinations,
+                topLevelDestinations = topLevelDestinations
             )
             AdaptiveLayoutApp(
                 navController = navController,
                 topLevelDestinations = topLevelDestinations,
-                currentRoute = viewModel.currentDestination?.route,
+                currentRoute = appState.currentDestination?.route,
                 windowSize = WindowWidthSizeClass.Compact,
                 foldingDevicePosture = DevicePosture.NormalPosture,
                 optionalNavigationDisplayConditions = true,
-                shouldShowBottomBar = viewModel.shouldShowBottomBar,
-                onNavigateToDestination = viewModel::navigate,
-                onNavigateAndPopUpToDestination = viewModel::navigateAndPopUp,
+                shouldShowBottomBar = appState.shouldShowBottomBar,
+                onNavigateToDestination = appState::navigate,
+                onNavigateAndPopUpToDestination = appState::navigateAndPopUp,
                 background = { _, content -> content() }
-            ) {isListAndDetail, navController, navigate, navigateAndPopUp ->
+            ) { isListAndDetail, navController, navigate, navigateAndPopUp ->
                 AdaptiveLayoutNavGraph(
                     navController = navController,
                     isListAndDetail = isListAndDetail,
