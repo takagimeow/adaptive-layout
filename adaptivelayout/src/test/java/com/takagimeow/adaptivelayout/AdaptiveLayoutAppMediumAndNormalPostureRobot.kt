@@ -56,26 +56,22 @@ class AdaptiveLayoutAppMediumAndNormalPostureRobot @Inject constructor() {
             )
 
             val navController = rememberNavController()
-            val context = LocalContext.current
-            val viewModel = AdaptiveLayoutViewModel(
-                contextProvider = object : ContextProvider {
-                    override val activity: ComponentActivity
-                        get() = context as ComponentActivity
-                },
+            val appState: AdaptiveLayoutAppState = rememberAdaptiveLayoutAppState(
                 navController = navController,
-                topLevelDestinations = topLevelDestinations,
+                topLevelDestinations = topLevelDestinations
             )
+
 
             AdaptiveLayoutApp(
                 navController = navController,
                 topLevelDestinations = topLevelDestinations,
-                currentRoute = viewModel.currentDestination?.route,
+                currentRoute = appState.currentDestination?.route,
                 windowSize = WindowWidthSizeClass.Medium,
                 foldingDevicePosture = DevicePosture.NormalPosture,
                 optionalNavigationDisplayConditions = true,
-                shouldShowBottomBar = viewModel.shouldShowBottomBar,
-                onNavigateToDestination = viewModel::navigate,
-                onNavigateAndPopUpToDestination = viewModel::navigateAndPopUp,
+                shouldShowBottomBar = appState.shouldShowBottomBar,
+                onNavigateToDestination = appState::navigate,
+                onNavigateAndPopUpToDestination = appState::navigateAndPopUp,
                 background = { _, content -> content() }
             ) {isListAndDetail, navController, navigate, navigateAndPopUp ->
                 AdaptiveLayoutNavGraph(
