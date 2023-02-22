@@ -11,9 +11,7 @@ object SettingsDestination : AdaptiveLayoutNavigationDestination {
     override val destination = "settings_destination"
 }
 
-fun NavGraphBuilder.settingsGraph(
-    isListAndDetail: Boolean,
-) {
+fun NavGraphBuilder.settingsGraph() {
     navigation(
         route = SettingsDestination.route,
         startDestination = SettingsDestination.destination,
@@ -21,9 +19,7 @@ fun NavGraphBuilder.settingsGraph(
         composable(
             route = SettingsDestination.destination,
         ) { navBackStackEntry ->
-            SettingsRoute(
-                isListAndDetail = isListAndDetail,
-            )
+            SettingsRoute()
         }
     }
 }

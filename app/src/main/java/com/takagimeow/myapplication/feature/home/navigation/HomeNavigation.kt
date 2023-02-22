@@ -12,7 +12,6 @@ object HomeDestination : AdaptiveLayoutNavigationDestination {
 }
 
 fun NavGraphBuilder.homeGraph(
-    isListAndDetail: Boolean,
     nestedGraphs: NavGraphBuilder.() -> Unit = {},
 ) {
     navigation(
@@ -22,9 +21,7 @@ fun NavGraphBuilder.homeGraph(
         composable(
             route = HomeDestination.destination,
         ) { navBackStackEntry ->
-            HomeRoute(
-                isListAndDetail = isListAndDetail,
-            )
+            HomeRoute()
         }
         nestedGraphs()
     }
