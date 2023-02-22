@@ -1,7 +1,6 @@
 # AdaptiveLayout Composable
 
 [![Release](https://jitpack.io/v/takagimeow/adaptive-layout.svg)](https://jitpack.io/#takagimeow/adaptive-layout)
-
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Jetpack Compose Composable for easy implementation of Adaptive Layout.
