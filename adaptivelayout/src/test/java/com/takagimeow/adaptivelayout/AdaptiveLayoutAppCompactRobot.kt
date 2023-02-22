@@ -1,8 +1,6 @@
 package com.takagimeow.adaptivelayout
 
-import androidx.activity.ComponentActivity
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -72,10 +70,9 @@ class AdaptiveLayoutAppCompactRobot @Inject constructor() {
                 onNavigateToDestination = appState::navigate,
                 onNavigateAndPopUpToDestination = appState::navigateAndPopUp,
                 background = { _, content -> content() }
-            ) { isListAndDetail, navController, navigate, navigateAndPopUp ->
+            ) { adaptiveLayoutNavController, navigate, navigateAndPopUp ->
                 AdaptiveLayoutNavGraph(
-                    navController = navController,
-                    isListAndDetail = isListAndDetail,
+                    navController = adaptiveLayoutNavController,
                     startDestination = HomeDestination.route,
                     onNavigateAndPopUpToDestination = navigateAndPopUp,
                     onNavigateToDestination = navigate,

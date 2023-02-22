@@ -23,9 +23,8 @@ fun AdaptiveLayout(
         topLevelDestinations = topLevelDestinations
     ),
     optionalNavigationDisplayConditions: Boolean = true,
-    background: @Composable (route: String?, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    background: @Composable (route: String?, backgroundContent: @Composable () -> Unit) -> Unit = { _, backgroundContent -> backgroundContent() },
     content: @Composable (
-        isListAndDetail: Boolean,
         navController: NavHostController,
         onNavigateToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
         onNavigateAndPopUpToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,

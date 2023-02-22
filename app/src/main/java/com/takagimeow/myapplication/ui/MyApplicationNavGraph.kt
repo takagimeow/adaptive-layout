@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.takagimeow.adaptivelayout.AdaptiveLayoutNavigationDestination
 import com.takagimeow.myapplication.feature.home.navigation.homeGraph
 import com.takagimeow.myapplication.feature.settings.navigation.settingsGraph
@@ -15,7 +14,6 @@ private const val TAG = "MyApplicationNavGraph"
 @Composable
 fun MyApplicationNavGraph(
     navController: NavHostController,
-    isListAndDetail: Boolean = false,
     onNavigateToDestination: (AdaptiveLayoutNavigationDestination, String, from: NavBackStackEntry?) -> Unit,
     onNavigateAndPopUpToDestination: (AdaptiveLayoutNavigationDestination, String, from: NavBackStackEntry?) -> Unit,
     startDestination: String,
@@ -37,11 +35,7 @@ fun MyApplicationNavGraph(
                 Log.d(TAG, "navigateToOnboardingが呼び出されました")
             }
         )
-        homeGraph(
-            isListAndDetail = isListAndDetail,
-        ) {}
-        settingsGraph(
-            isListAndDetail = isListAndDetail,
-        )
+        homeGraph() {}
+        settingsGraph()
     }
 }

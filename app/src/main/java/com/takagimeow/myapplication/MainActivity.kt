@@ -39,10 +39,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     },
-                ) { isListAndDetail, navController, navigate, navigateAndPopUp ->
+                ) { navController, navigate, navigateAndPopUp ->
                     MyApplicationNavGraph(
                         navController = navController,
-                        isListAndDetail = isListAndDetail,
                         startDestination = SplashDestination.route,
                         onNavigateAndPopUpToDestination = navigateAndPopUp,
                         onNavigateToDestination = navigate,
