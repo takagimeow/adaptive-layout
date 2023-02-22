@@ -15,10 +15,12 @@ import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.takagimeow.adaptivelayout.core.util.LocalContentType
 import kotlinx.coroutines.launch
 
 // private const val TAG = "AdaptiveLayoutApp"
@@ -263,15 +265,15 @@ fun AdaptiveLayoutAppContent(
                 modifier = Modifier.weight(1f)
             ) {
                 background(currentRoute) {
-                    content(
-                        isListAndDetail = contentType == AdaptiveLayoutContentType.LIST_AND_DETAIL,
-                        navController = navController,
-                        onNavigateToDestination = onNavigateToDestination,
-                        onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
-                    )
+                    CompositionLocalProvider(LocalContentType provides contentType) {
+                        content(
+                            navController = navController,
+                            onNavigateToDestination = onNavigateToDestination,
+                            onNavigateAndPopUpToDestination = onNavigateAndPopUpToDestination,
+                        )
+                    }
                 }
             }
-
             AnimatedVisibility(
                 visible = navigationType == AdaptiveLayoutNavigationType.BOTTOM_NAVIGATION && shouldShowBottomBar
             ) {
