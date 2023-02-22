@@ -42,7 +42,6 @@ fun AdaptiveLayoutApp(
     // Composable
     background: @Composable (route: String?, @Composable () -> Unit) -> Unit,
     content: @Composable (
-        isListAndDetail: Boolean,
         navController: NavHostController,
         onNavigateToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
         onNavigateAndPopUpToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
@@ -118,7 +117,6 @@ private fun AdaptiveLayoutNavigationWrapperUI(
     // Composable
     background: @Composable (route: String?, @Composable () -> Unit) -> Unit,
     content: @Composable (
-        isListAndDetail: Boolean,
         navController: NavHostController,
         onNavigateToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
         onNavigateAndPopUpToDestination: (navigationDestination: AdaptiveLayoutNavigationDestination, destination: String, from: NavBackStackEntry?) -> Unit,
@@ -239,7 +237,6 @@ fun AdaptiveLayoutAppContent(
     // Composable
     background: @Composable (route: String?, @Composable () -> Unit) -> Unit,
     content: @Composable (
-        isListAndDetail: Boolean,
         navController: NavHostController,
         onNavigateToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
         onNavigateAndPopUpToDestination: (destination: AdaptiveLayoutNavigationDestination, route: String?, from: NavBackStackEntry?) -> Unit,
