@@ -12,11 +12,11 @@ The composable takes care of the complicated work required to implement adaptive
 
 ## Samples
 
-| Device | |
-| --- | --- |
-| Smartphone |![](https://user-images.githubusercontent.com/66447334/216823094-4e4c7b05-7ece-428f-9383-4dd28447bb96.png)|
-| Foldable|![](https://user-images.githubusercontent.com/66447334/216823109-5a0bd223-d453-47fd-8637-d9ec721b697f.png)|
-| Tablet |![](https://user-images.githubusercontent.com/66447334/216823121-f5b41ad2-2765-45e1-a6bc-d5f0d9d10c2c.png)|
+| Device     |                                                                                                            |
+|------------|------------------------------------------------------------------------------------------------------------|
+| Smartphone | ![](https://user-images.githubusercontent.com/66447334/220685929-58297e92-9475-47c1-b6cd-1554aa4a5976.png) |
+| Foldable   | ![](https://user-images.githubusercontent.com/66447334/220685979-8bf5c653-5a35-4be2-91b1-e6cc9a950c41.png) |
+| Tablet     | ![](https://user-images.githubusercontent.com/66447334/220686029-208c70dd-bbb1-40b2-8e6b-bde4152cccc5.png) |
 
 ## Usage
 
@@ -77,15 +77,83 @@ class MainActivity : ComponentActivity() {
                     background = { _, content ->
                         content()
                     },
-                ) { isListAndDetail, navController, navigate, navigateAndPopUp ->
+                ) { navController, navigate, navigateAndPopUp ->
                     MyApplicationNavGraph(
                         navController = navController,
-                        isListAndDetail = isListAndDetail,
                         startDestination = HomeDestination.route,
                         onNavigateAndPopUpToDestination = navigateAndPopUp,
                         onNavigateToDestination = navigate,
                     )
                 }
+            }
+        }
+    }
+}
+```
+
+The `LocalContentType` can then be accessed inside composables.
+
+This allows the developer to decide if only the list should be displayed on the current device, or if both the list and the detail screen should be displayed.
+
+```kotlin
+@Composable
+fun HomeRoute() {
+    val isListAndDetail = (LocalContentType.current == AdaptiveLayoutContentType.LIST_AND_DETAIL)
+
+    HomeScreen(
+        isListAndDetail = isListAndDetail,
+    )
+}
+
+@Composable
+fun HomeScreen(
+    isListAndDetail: Boolean,
+) {
+    val activity = LocalContext.current
+    val displayFeatures = calculateDisplayFeatures(activity as Activity)
+
+    if(isListAndDetail) {
+        TwoPane(
+            first = {
+                Card(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text("Home Screen - First")
+                    }
+                }
+            },
+            second = {
+                Card(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text("Home Screen - Second")
+                    }
+                }
+            },
+            strategy = HorizontalTwoPaneStrategy(
+                splitFraction = 1f / 3f,
+            ),
+            displayFeatures = displayFeatures,
+            foldAwareConfiguration = FoldAwareConfiguration.VerticalFoldsOnly,
+            modifier = Modifier.padding(8.dp)
+        )
+    } else {
+        Card(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text("Home Screen - Single Pane")
             }
         }
     }
